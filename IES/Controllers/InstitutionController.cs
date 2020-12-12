@@ -73,12 +73,29 @@ namespace IES.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit()
+        public ActionResult Edit(Institution institution)
         {
-            
-
-            return View();
+            var id = institution.InstitutionId;
+            _institutions[_institutions.IndexOf(_institutions.Where(i => i.InstitutionId == id).First())] = institution;
+            return RedirectToAction("Index");
         }
 
+        public ActionResult Details(long id)
+        {
+            return View(_institutions.Where(i => i.InstitutionId == id).First());
+        }
+
+        public ActionResult Delete(long id)
+        {
+            return View(_institutions.Where(i => i.InstitutionId == id).First());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(Institution institution)
+        {
+            _institutions.Remove(_institutions.Where(i => i.InstitutionId == institution.InstitutionId).First());
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
