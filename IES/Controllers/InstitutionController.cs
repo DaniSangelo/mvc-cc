@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using IES.Models;
+using System.Linq;
 
 namespace IES.Controllers
 {
-    public class InstitutionController1 : Controller
+    public class InstitutionController : Controller
     {
         private static IList<Institution> _institutions = new List<Institution>()
         {
@@ -12,37 +13,37 @@ namespace IES.Controllers
             {
                 InstitutionId = 1,
                 Name = "UniParaná",
-                Endereco="Paraná"
+                Address="Paraná"
             },
             new Institution()
             {
                 InstitutionId = 2,
                 Name = "UniSanta",
-                Endereco="Santa Catarina"
+                Address="Santa Catarina"
             },
             new Institution()
             {
                 InstitutionId = 3,
                 Name = "UniSãoPaulo",
-                Endereco="São Paulo"
+                Address="São Paulo"
             },
             new Institution()
             {
                 InstitutionId = 4,
                 Name = "UniSulgrandense",
-                Endereco="Rio Grande do Sul"
+                Address="Rio Grande do Sul"
             },
             new Institution()
             {
                 InstitutionId = 5,
                 Name = "UniCarioca",
-                Endereco="Rio de Janeiro"
+                Address="Rio de Janeiro"
             },
             new Institution()
             {
                 InstitutionId = 6,
                 Name = "UniHorizonte",
-                Endereco="Minas Gerais"
+                Address="Minas Gerais"
             }
         };
 
@@ -50,5 +51,34 @@ namespace IES.Controllers
         {
             return View(_institutions);
         }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Institution institution)
+        {
+            _institutions.Add(institution);
+            institution.InstitutionId = _institutions.Select(i => i.InstitutionId).Max() + 1;
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Edit(long id)
+        {
+            return View(_institutions.Where(i => i.InstitutionId == id).First());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit()
+        {
+            
+
+            return View();
+        }
+
     }
 }
