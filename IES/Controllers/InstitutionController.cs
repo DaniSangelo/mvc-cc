@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using IES.Models;
 using System.Linq;
+using IES.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace IES.Controllers
 {
@@ -47,9 +50,16 @@ namespace IES.Controllers
             }
         };
 
-        public IActionResult Index()
+        private readonly IESContext _context;
+
+        public InstitutionController(IESContext context)
         {
-            return View(_institutions);
+            _context = context;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.Institutions.ToListAsync());
         }
 
         public ActionResult Create()
@@ -59,42 +69,45 @@ namespace IES.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Institution institution)
+        public async Task<ActionResult> Create(Institution institution)
         {
-            _institutions.Add(institution);
-            institution.InstitutionId = _institutions.Select(i => i.InstitutionId).Max() + 1;
+            _context.Add(institution);
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        public ActionResult Edit(long id)
+        public async Task<ActionResult> Edit(long id)
         {
-            return View(_institutions.Where(i => i.InstitutionId == id).First());
+            return View(await _context.Institutions.Where(i => i.InstitutionId == id).FirstAsync());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Institution institution)
+        public async Task<ActionResult> Edit(Institution institution)
         {
-            var id = institution.InstitutionId;
-            _institutions[_institutions.IndexOf(_institutions.Where(i => i.InstitutionId == id).First())] = institution;
+            _context.Update(institution);
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        public ActionResult Details(long id)
+        public async Task<ActionResult> Details(long id)
         {
-            return View(_institutions.Where(i => i.InstitutionId == id).First());
+            return View(await _context.Institutions.Where(i => i.InstitutionId == id).FirstAsync());
         }
 
-        public ActionResult Delete(long id)
+        public async Task<ActionResult> Delete(long id)
         {
-            return View(_institutions.Where(i => i.InstitutionId == id).First());
+            var obj = await _context.Institutions.FindAsync(id);
+            return View(obj);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(Institution institution)
+        public async Task<ActionResult> Delete(Institution institution)
         {
-            _institutions.Remove(_institutions.Where(i => i.InstitutionId == institution.InstitutionId).First());
+            var obj = await _context.Institutions.Where(i => i.InstitutionId == institution.InstitutionId).FirstAsync();
+            _context.Institutions.Remove(obj);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
     }
