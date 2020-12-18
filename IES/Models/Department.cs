@@ -8,6 +8,7 @@ namespace IES.Models
 {
     public class Department
     {
+        [Display(Name = "Id")]
         public long? DepartmentId { get; set; }
         public string Name { get; set; }
 

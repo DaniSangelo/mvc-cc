@@ -1,7 +1,11 @@
 ﻿@model IEnumerable<IES.Models.Department>
+@{
+    ViewData["Title"] = "Department";
+}
 
+<h2 style="margin-top: 5rem;">@ViewData["Title"]</h2>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-default" asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -15,21 +19,22 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Institution.Name)
-            </td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Institution.Name)
+                </td>
 
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.DepartmentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.DepartmentId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.DepartmentId">Delete</a>
-            </td>
-        </tr>
-}
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.DepartmentId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.DepartmentId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.DepartmentId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

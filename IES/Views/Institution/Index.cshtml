@@ -1,53 +1,48 @@
 ﻿@model IEnumerable<IES.Models.Institution>
 
-<!DOCTYPE html>
+@{
+    ViewData["Title"] = "Institution";
+}
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
+<h2 style="margin-top: 5rem;">@ViewData["Title"]</h2>
+<p>
+    <a class="btn btn-default" asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.InstitutionId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.InstitutionId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Address)
-                </th>
-                <th></th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InstitutionId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @*I can use a Tag Helper <a asp-action="" asp-route-id></a> instead of HTML Helpers @Html.ActionLink. Whatever..*@
+                    @Html.ActionLink("Edit", "Edit", new { id = item.InstitutionId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.InstitutionId }) |
+                    <a asp-action="Delete" asp-route-id="@item.InstitutionId">Delete</a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InstitutionId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Address)
-                    </td>
-                    <td>
-                        @*I can use a Tag Helper <a asp-action="" asp-route-id></a> instead of HTML Helpers @Html.ActionLink. Whatever..*@
-                        @Html.ActionLink("Edit", "Edit", new { id = item.InstitutionId }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.InstitutionId }) |
-                        <a asp-action="Delete" asp-route-id="@item.InstitutionId">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</body>
-</html>
+        }
+    </tbody>
+</table>

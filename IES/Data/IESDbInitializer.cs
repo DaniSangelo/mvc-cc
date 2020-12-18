@@ -7,7 +7,7 @@ namespace IES.Data
     {
         public static void Initialize(IESContext context)
         {
-            context.Database.EnsureDeleted();
+            //context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
             if (context.Departments.Any())
                 return;

@@ -1,20 +1,12 @@
 ﻿@model IES.Models.Institution
 
-@*@{
-    Layout = null;
-}*@
+@{
+    ViewData["Title"] = "Institution";
+}
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
+<h2 style="margin-top: 5rem;">@ViewData["Title"]</h2>
 
 <div>
-    <h4>Institution</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -32,8 +24,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id ="@Model.InstitutionId">Edit</a>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.InstitutionId">Edit</a>
+    <a class="btn btn-default" role="button" asp-action="Index">Back to List</a>
 </div>
-</body>
-</html>

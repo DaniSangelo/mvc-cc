@@ -62,13 +62,13 @@ namespace IES.Controllers
                 return NotFound();
 
             var department = await _context.Departments.SingleOrDefaultAsync(d => d.DepartmentId == id);
-            
+
             if (department == null)
                 return NotFound();
-            
+
             ViewBag.Institutions = new SelectList(_context.Institutions.OrderBy(
                 i => i.Name), "InstitutionId", "Name", department.InstitutionId);
-            
+
             return View(department);
         }
 
@@ -78,6 +78,7 @@ namespace IES.Controllers
         {
             if (id != department.DepartmentId)
                 return NotFound();
+
             if (ModelState.IsValid)
             {
                 try
@@ -104,6 +105,37 @@ namespace IES.Controllers
 
         #endregion
 
+        #region delete
+        public async Task<IActionResult> Delete(long? id)
+        {
+            var department = await _context.Departments.SingleOrDefaultAsync(d => d.DepartmentId == id);
+
+            if (department == null)
+                return NotFound();
+
+            return View(await _context.Departments.Where(d => d.DepartmentId == id).FirstAsync());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(long? id, [Bind("DepartmentId, Name")] Department department)
+        {
+            if (department == null)
+                return NotFound();
+            
+            if (ModelState.IsValid)
+            {
+                var obj = await _context.Departments.SingleOrDefaultAsync(d => d.DepartmentId == id);
+                _context.Departments.Remove(obj);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(department);
+
+        }
+
+        #endregion
         public ActionResult Details(long? id)
         {
             var department = _context.Departments.Include(d => d.Institution).SingleOrDefault(d => d.DepartmentId == id);
