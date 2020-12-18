@@ -1,13 +1,5 @@
 ﻿@model IEnumerable<IES.Models.Institution>
 
-@*
-    Layout defined as null means that my application doesn't go to use
-    the layout defined in _ViewStart, which points to _Layout.cshtml
-@{
-    Layout = null;
-}
-*@
-
 <!DOCTYPE html>
 
 <html>
@@ -48,7 +40,7 @@
                         @Html.DisplayFor(modelItem => item.Address)
                     </td>
                     <td>
-                    @*I can use a Tag Helper <a asp-action="" asp-route-id></a> instead of HTML Helpers @Html.ActionLink. Whatever..*@
+                        @*I can use a Tag Helper <a asp-action="" asp-route-id></a> instead of HTML Helpers @Html.ActionLink. Whatever..*@
                         @Html.ActionLink("Edit", "Edit", new { id = item.InstitutionId }) |
                         @Html.ActionLink("Details", "Details", new { id = item.InstitutionId }) |
                         <a asp-action="Delete" asp-route-id="@item.InstitutionId">Delete</a>
