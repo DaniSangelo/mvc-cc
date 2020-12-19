@@ -62,6 +62,7 @@ namespace IES.Controllers
             return View(await _context.Institutions.ToListAsync());
         }
 
+        #region create
         public ActionResult Create()
         {
             return View();
@@ -75,7 +76,9 @@ namespace IES.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        #endregion
 
+        #region edit
         public async Task<ActionResult> Edit(long id)
         {
             return View(await _context.Institutions.Where(i => i.InstitutionId == id).FirstAsync());
@@ -89,12 +92,17 @@ namespace IES.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        #endregion
 
         public async Task<ActionResult> Details(long id)
         {
-            return View(await _context.Institutions.Where(i => i.InstitutionId == id).FirstAsync());
+            var institution = await _context.Institutions.Include(
+                d => d.Departments).SingleOrDefaultAsync(d => d.InstitutionId == id);
+            
+            return View(institution);
         }
 
+        #region delete
         public async Task<ActionResult> Delete(long id)
         {
             var obj = await _context.Institutions.FindAsync(id);
@@ -110,5 +118,6 @@ namespace IES.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        #endregion
     }
 }
