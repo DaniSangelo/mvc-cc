@@ -43,15 +43,15 @@
             <div class="col-3">
                 <nav class="nav flex-column bg-transparent" style="margin-left:40px;">
                     <div class="row">
-                        <a class="nav-link active" asp-controller="Instituicao" asp-action="Index">
+                        <a class="nav-link active" asp-controller="Institution" asp-action="Index">
                             <img src="~/images/university.png" width="30" height="30" alt="">
-                            Instituições
+                            Institutions
                         </a>
                     </div>
                     <div class="row">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" asp-controller="Department" asp-action="Index">
                             <img src="~/images/department.png" width="30" height="30" alt="">
-                            Departamentos
+                            Departments
                         </a>
                     </div>
                 </nav>
@@ -63,7 +63,7 @@
     </div>
 
     <nav class="navbar fixed-bottom" style="background-color: #e3f2fd; margin-top:20px;">
-        <a class="navbar-brand" href="#">Everton Coimbra de Araújo</a>
+        <a class="navbar-brand" href="#">Daniel Sângelo</a>
     </nav>
     <environment include="Development">
         <script src="~/lib/jquery/jquery.slim.min.js"></script>
