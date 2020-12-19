@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IES.Models.Exceptions;
 
 namespace IES.Controllers
 {
@@ -36,16 +37,19 @@ namespace IES.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind("Name, InstitutionId")] Department department)
+        public async Task<ActionResult> Create([Bind("Name, InstitutionId, Institution.Name")] Department department)
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    _context.Add(department);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
+                if (!HasInstitution(department.InstitutionId))
+                    throw new NoInstitutionException ($"Institution must be informed.");
+
+                    if (ModelState.IsValid)
+                    {
+                        _context.Add(department);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }                
             }
             catch (DbUpdateException)
             {
@@ -136,10 +140,19 @@ namespace IES.Controllers
         }
 
         #endregion
+        
         public ActionResult Details(long? id)
         {
             var department = _context.Departments.Include(d => d.Institution).SingleOrDefault(d => d.DepartmentId == id);
             return View(department);
+        }
+
+        private bool HasInstitution(long? id)
+        {
+            if (id == null || id == 0)
+                return false;
+
+            return true;
         }
     }
 }

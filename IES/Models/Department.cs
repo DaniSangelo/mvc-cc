@@ -10,9 +10,12 @@ namespace IES.Models
     {
         [Display(Name = "Id")]
         public long? DepartmentId { get; set; }
+
+        [Required(ErrorMessage = "Department {0} must be informed")]
         public string Name { get; set; }
 
         [Display(Name="Institution")]
+        [Required(ErrorMessage = "Institution must be informed")]
         public long? InstitutionId { get; set; }
         public Institution Institution { get; set; }
     }
