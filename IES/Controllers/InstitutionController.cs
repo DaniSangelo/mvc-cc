@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using IES.Models;
+using Model.Registrations;
 using System.Linq;
 using IES.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using IES.Data.DAL.Registrations;
 
 namespace IES.Controllers
 {
@@ -51,15 +52,17 @@ namespace IES.Controllers
         };
 
         private readonly IESContext _context;
+        private readonly InstitutionDAL _institutionDAL;
 
         public InstitutionController(IESContext context)
         {
             _context = context;
+            _institutionDAL = new InstitutionDAL(context);
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Institutions.ToListAsync());
+            return View(await _institutionDAL.GetInstitutionsOrderedByName().ToListAsync());
         }
 
         #region create
@@ -81,7 +84,7 @@ namespace IES.Controllers
         #region edit
         public async Task<ActionResult> Edit(long id)
         {
-            return View(await _context.Institutions.Where(i => i.InstitutionId == id).FirstAsync());
+            return View(GetInstitutionById(id));
         }
 
         [HttpPost]
@@ -95,29 +98,38 @@ namespace IES.Controllers
         #endregion
 
         public async Task<ActionResult> Details(long id)
-        {
-            var institution = await _context.Institutions.Include(
-                d => d.Departments).SingleOrDefaultAsync(d => d.InstitutionId == id);
-            
-            return View(institution);
+        {            
+            return View(GetInstitutionById(id));
         }
 
         #region delete
         public async Task<ActionResult> Delete(long id)
         {
-            var obj = await _context.Institutions.FindAsync(id);
-            return View(obj);
+            return View(GetInstitutionById(id));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(Institution institution)
         {
-            var obj = await _context.Institutions.Where(i => i.InstitutionId == institution.InstitutionId).FirstAsync();
+            var obj = await _institutionDAL.GetInstitutionsById(institution.InstitutionId);
             _context.Institutions.Remove(obj);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
         #endregion
+
+        private async Task<IActionResult> GetInstitutionById(long? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var institution = await _institutionDAL.GetInstitutionsById(id);
+
+            if (institution == null)
+                return NotFound();
+
+            return View(institution);
+        }
     }
 }

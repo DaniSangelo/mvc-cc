@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IES.Models
+namespace Model.Registrations
 {
     public class Department
     {

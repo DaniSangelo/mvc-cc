@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using IES.Data;
-using IES.Models;
+using Model.Registrations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IES.Models.Exceptions;
@@ -42,7 +40,7 @@ namespace IES.Controllers
             try
             {
                 if (!HasInstitution(department.InstitutionId))
-                    throw new NoInstitutionException ($"Institution must be informed.");
+                    throw new NoInstitutionException ("Institution must be informed.");
 
                     if (ModelState.IsValid)
                     {

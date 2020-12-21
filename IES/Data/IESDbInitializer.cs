@@ -1,4 +1,4 @@
-﻿using IES.Models;
+﻿using Model.Registrations;
 using System.Linq;
 
 namespace IES.Data
