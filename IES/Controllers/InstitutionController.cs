@@ -73,48 +73,72 @@ namespace IES.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Institution institution)
+        public async Task<ActionResult> Create([Bind("Name, Address")] Institution institution)
         {
-            _context.Add(institution);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    await _institutionDAL.SaveInstitution(institution);
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Wasn't possible to save data");
+            }
+            return View(institution);
         }
         #endregion
 
         #region edit
         public async Task<ActionResult> Edit(long id)
         {
-            return View(GetInstitutionById(id));
+            return View(await GetInstitutionById(id));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Institution institution)
+        public async Task<ActionResult> Edit(long? id, [Bind("InstitutionId, Name, Address")] Institution institution)
         {
-            _context.Update(institution);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            if (id != institution.InstitutionId)
+                return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _institutionDAL.SaveInstitution(institution);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!await InstitutionExists(institution.InstitutionId))
+                        return NotFound();
+                    else
+                        throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
         #endregion
 
         public async Task<ActionResult> Details(long id)
         {            
-            return View(GetInstitutionById(id));
+            return View(await GetInstitutionById(id));
         }
 
         #region delete
         public async Task<ActionResult> Delete(long id)
         {
-            return View(GetInstitutionById(id));
+            return View(await GetInstitutionById(id));
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(Institution institution)
         {
-            var obj = await _institutionDAL.GetInstitutionsById(institution.InstitutionId);
-            _context.Institutions.Remove(obj);
-            await _context.SaveChangesAsync();
+            var obj = await _institutionDAL.DeleteInstitution(institution.InstitutionId);
+            TempData["Message"] = "Institution " + obj.Name.ToUpper() + " was deleted";
             return RedirectToAction(nameof(Index));
         }
         #endregion
@@ -124,12 +148,17 @@ namespace IES.Controllers
             if (id == null)
                 return NotFound();
 
-            var institution = await _institutionDAL.GetInstitutionsById(id);
+            var institution = await _institutionDAL.GetInstitutionById(id);
 
             if (institution == null)
                 return NotFound();
 
             return View(institution);
+        }
+        
+        private async Task<bool> InstitutionExists(long? id)
+        {
+            return await _institutionDAL.GetInstitutionById(id) != null;
         }
     }
 }

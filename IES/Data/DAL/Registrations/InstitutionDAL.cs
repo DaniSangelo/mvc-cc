@@ -21,11 +21,29 @@ namespace IES.Data.DAL.Registrations
             return _context.Institutions.OrderBy(i => i.Name);
         }
         
-        public async Task<Institution> GetInstitutionsById(long? id)
+        public async Task<Institution> GetInstitutionById(long? id)
         {
             return await _context.Institutions
                 .Include(d => d.Departments)
                 .SingleOrDefaultAsync(i => i.InstitutionId == id);
+        }
+
+        public async Task<Institution> SaveInstitution(Institution institution)
+        {
+            if (institution.InstitutionId == null)
+                _context.Institutions.Add(institution);
+            else
+                _context.Update(institution);
+            await _context.SaveChangesAsync();
+            return institution;
+        }
+        
+        public async Task<Institution> DeleteInstitution(long? id)
+        {
+            Institution institution = await GetInstitutionById(id);
+            _context.Institutions.Remove(institution);
+            await _context.SaveChangesAsync();
+            return institution;
         }
     }
 }
