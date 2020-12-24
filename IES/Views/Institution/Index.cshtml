@@ -39,7 +39,7 @@
                     @*I can use a Tag Helper <a asp-action="" asp-route-id></a> instead of HTML Helpers @Html.ActionLink. Whatever..*@
                     @Html.ActionLink("Edit", "Edit", new { id = item.InstitutionId }) |
                     @Html.ActionLink("Details", "Details", new { id = item.InstitutionId }) |
-                    <a asp-action="Delete" asp-route-id="@item.InstitutionId">Delete</a>
+                    <a asp-action="Delete" asp-route-id= "@item.InstitutionId">Delete</a>
                 </td>
             </tr>
         }

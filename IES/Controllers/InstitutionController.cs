@@ -65,6 +65,11 @@ namespace IES.Controllers
             return View(await _institutionDAL.GetInstitutionsOrderedByName().ToListAsync());
         }
 
+        public async Task<IActionResult> Details(long id)
+        {            
+            return await GetInstitutionViewById(id);
+        }
+
         #region create
         public ActionResult Create()
         {
@@ -92,9 +97,9 @@ namespace IES.Controllers
         #endregion
 
         #region edit
-        public async Task<ActionResult> Edit(long id)
+        public async Task<IActionResult> Edit(long id)
         {
-            return View(await GetInstitutionById(id));
+            return await GetInstitutionViewById(id);
         }
 
         [HttpPost]
@@ -122,22 +127,17 @@ namespace IES.Controllers
         }
         #endregion
 
-        public async Task<ActionResult> Details(long id)
-        {            
-            return View(await GetInstitutionById(id));
-        }
-
         #region delete
-        public async Task<ActionResult> Delete(long id)
+        public async Task<IActionResult> Delete(long? id)
         {
-            return View(await GetInstitutionById(id));
+            return await GetInstitutionViewById(id);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(Institution institution)
         {
-            var obj = await _institutionDAL.DeleteInstitution(institution.InstitutionId);
+            var obj = await _institutionDAL.DeleteInstitution((long)institution.InstitutionId);
             TempData["Message"] = "Institution " + obj.Name.ToUpper() + " was deleted";
             return RedirectToAction(nameof(Index));
         }
@@ -148,7 +148,7 @@ namespace IES.Controllers
             if (id == null)
                 return NotFound();
 
-            var institution = await _institutionDAL.GetInstitutionById(id);
+            var institution = await _institutionDAL.GetInstitutionById((long) id);
 
             if (institution == null)
                 return NotFound();
@@ -158,7 +158,20 @@ namespace IES.Controllers
         
         private async Task<bool> InstitutionExists(long? id)
         {
-            return await _institutionDAL.GetInstitutionById(id) != null;
+            return await _institutionDAL.GetInstitutionById((long) id) != null;
+        }
+
+        private async Task<IActionResult> GetInstitutionViewById(long? id)
+        {
+            if (id == null)            
+                return NotFound();            
+
+            var institution = await _institutionDAL.GetInstitutionById((long)id);
+
+            if (institution == null)            
+                return NotFound();            
+
+            return View(institution);
         }
     }
 }

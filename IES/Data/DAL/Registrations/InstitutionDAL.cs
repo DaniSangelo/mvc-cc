@@ -21,7 +21,7 @@ namespace IES.Data.DAL.Registrations
             return _context.Institutions.OrderBy(i => i.Name);
         }
         
-        public async Task<Institution> GetInstitutionById(long? id)
+        public async Task<Institution> GetInstitutionById(long id)
         {
             return await _context.Institutions
                 .Include(d => d.Departments)
@@ -38,7 +38,7 @@ namespace IES.Data.DAL.Registrations
             return institution;
         }
         
-        public async Task<Institution> DeleteInstitution(long? id)
+        public async Task<Institution> DeleteInstitution(long id)
         {
             Institution institution = await GetInstitutionById(id);
             _context.Institutions.Remove(institution);
