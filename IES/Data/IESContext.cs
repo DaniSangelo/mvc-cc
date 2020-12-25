@@ -1,4 +1,5 @@
 ﻿using Model.Registrations;
+using Model.Students;
 using Microsoft.EntityFrameworkCore;
 
 namespace IES.Data
@@ -9,6 +10,7 @@ namespace IES.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Discipline> Disciplines { get; set; }
+        public DbSet<Student> Students { get; set; }
         public IESContext(DbContextOptions<IESContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
