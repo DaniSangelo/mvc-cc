@@ -19,10 +19,10 @@ namespace Model.Students
         [Required]
         public string Name { get; set; }
 
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy")]
-        [Required]
+        [Required(ErrorMessage = "{0} required")]
         [Display(Name = "Birth Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? BirthDate { get; set; }
     }
 }
