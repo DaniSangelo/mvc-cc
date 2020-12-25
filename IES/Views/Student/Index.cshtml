@@ -1,15 +1,11 @@
 ﻿@model IEnumerable<Model.Students.Student>
 
-<!DOCTYPE html>
+@{
+    ViewData["Title"] = "Student";
+}
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-default">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -53,5 +49,3 @@
 }
     </tbody>
 </table>
-</body>
-</html>
