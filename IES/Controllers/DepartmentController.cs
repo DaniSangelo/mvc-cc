@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using IES.Models.Exceptions;
 using IES.Data.DAL.Registrations;
-using System;
 
 namespace IES.Controllers
 {
@@ -110,15 +109,8 @@ namespace IES.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(long? id, [Bind("DepartmentId, Name")] Department department)
         {
-            if (department == null)
-                return NotFound();
-
-            if (ModelState.IsValid)
-            {
-                var obj = await _departmentDAL.DeleteDepartmentById((long)id);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(department);
+            _ = await _departmentDAL.DeleteDepartmentById((long)id);
+            return RedirectToAction(nameof(Index));
         }
 
         #endregion
@@ -138,14 +130,14 @@ namespace IES.Controllers
 
         public async Task<bool> DepartmentExists(long? id)
         {
-            return await _departmentDAL.GetDepartmentById((long) id) != null;
+            return await _departmentDAL.GetDepartmentById((long)id) != null;
         }
 
         private async Task<IActionResult> GetDepartmentViewById(long? id)
         {
             if (id == null)
                 return NotFound();
-            
+
             var department = await _departmentDAL.GetDepartmentById((long)id);
 
             if (id == null)

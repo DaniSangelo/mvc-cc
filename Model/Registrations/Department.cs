@@ -18,5 +18,6 @@ namespace Model.Registrations
         [Required(ErrorMessage = "Institution must be informed")]
         public long? InstitutionId { get; set; }
         public Institution Institution { get; set; }
+        public ICollection<Course> Courses { get; set; }
     }
 }
