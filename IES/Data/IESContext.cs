@@ -1,16 +1,19 @@
-﻿using Model.Registrations;
-using Model.Students;
+﻿using IES.Models.Infra;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Model.Registrations;
+using Model.Students;
 
 namespace IES.Data
 {
-    public class IESContext : DbContext
+    public class IESContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Institution> Institutions { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Discipline> Disciplines { get; set; }
         public DbSet<Student> Students { get; set; }
+       
         public IESContext(DbContextOptions<IESContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

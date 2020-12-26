@@ -6,10 +6,12 @@ using IES.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using IES.Data.DAL.Registrations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IES.Areas.Registrations.Controllers
 {
     [Area("Registrations")]
+    [Authorize]
     public class InstitutionController : Controller
     {
         private static IList<Institution> _institutions = new List<Institution>()
