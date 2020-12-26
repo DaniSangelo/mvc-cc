@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 using IES.Models.Exceptions;
 using IES.Data.DAL.Registrations;
 
-namespace IES.Controllers
+namespace IES.Areas.Registrations.Controllers
 {
+    [Area("Registrations")]
     public class DepartmentController : Controller
     {
         private readonly IESContext _context;

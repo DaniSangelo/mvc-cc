@@ -7,8 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using IES.Data.DAL.Registrations;
 
-namespace IES.Controllers
+namespace IES.Areas.Registrations.Controllers
 {
+    [Area("Registrations")]
     public class InstitutionController : Controller
     {
         private static IList<Institution> _institutions = new List<Institution>()

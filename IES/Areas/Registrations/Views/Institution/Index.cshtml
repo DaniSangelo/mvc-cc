@@ -2,10 +2,11 @@
 
 @{
     ViewData["Title"] = "Institution";
+    Layout = "_Layout";
 }
 
 <p>
-    <a class="btn btn-default" asp-action="Create">Create New</a>
+    <a class="btn btn-default" asp-action="Create" asp-area="Registrations">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -36,10 +37,9 @@
                     @Html.DisplayFor(modelItem => item.Address)
                 </td>
                 <td>
-                    @*I can use a Tag Helper <a asp-action="" asp-route-id></a> instead of HTML Helpers @Html.ActionLink. Whatever..*@
-                    @Html.ActionLink("Edit", "Edit", new { id = item.InstitutionId }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.InstitutionId }) |
-                    <a asp-action="Delete" asp-route-id= "@item.InstitutionId">Delete</a>
+                    <a asp-area="Registrations" asp-action="Edit" asp-route-id="@item.InstitutionId">Edit</a> |
+                    <a asp-area="Registrations" asp-action="Details" asp-route-id="@item.InstitutionId">Details</a> |
+                    <a asp-area = "Registrations" asp-action="Delete" asp-route-id= "@item.InstitutionId">Delete</a>
                 </td>
             </tr>
         }

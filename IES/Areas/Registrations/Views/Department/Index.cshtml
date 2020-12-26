@@ -1,10 +1,11 @@
 ﻿@model IEnumerable<Model.Registrations.Department>
 @{
     ViewData["Title"] = "Department";
+    Layout = "_Layout";
 }
 
 <p>
-    <a class="btn btn-default" asp-action="Create">Create New</a>
+    <a class="btn btn-default" asp-action="Create" asp-area="Registrations">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -29,9 +30,9 @@
                 </td>
 
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.DepartmentId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.DepartmentId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.DepartmentId">Delete</a>
+                    <a asp-area="Registrations" asp-action="Edit" asp-route-id="@item.DepartmentId">Edit</a> |
+                    <a asp-area="Registrations" asp-action="Details" asp-route-id="@item.DepartmentId">Details</a> |
+                    <a asp-area="Registrations" asp-action="Delete" asp-route-id="@item.DepartmentId">Delete</a>
                 </td>
             </tr>
         }

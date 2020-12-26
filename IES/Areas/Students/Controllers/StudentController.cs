@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 using IES.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace IES.Controllers
+namespace IES.Areas.Students.Controllers
 {
+    [Area("Students")]
     public class StudentController : Controller
     {
         private readonly IESContext _context;

@@ -1,11 +1,12 @@
 ﻿@model Model.Registrations.Department
 @{ 
     ViewData["Title"] = "Department";
+    Layout = "_Layout";
 }
 
 <div>
     <hr />
-    @{await Html.RenderPartialAsync("~/Views/Department/_PartialcontentDepartment.cshtml", Model); }
+    @{await Html.RenderPartialAsync("~/Areas/Registrations/Views/Department/_PartialcontentDepartment.cshtml", Model); }
 </div>
 
 <div>

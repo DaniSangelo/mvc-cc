@@ -2,14 +2,13 @@
 
 @{
     ViewData["Title"] = "Institution";
+    Layout = "_Layout";
 }
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
     <hr />
-
-    @{await Html.RenderPartialAsync("~/Views/Institution/_PartialContentInstitution.cshtml", Model); }    
-
+    @{await Html.RenderPartialAsync("~/Areas/Registrations/Views/Institution/_PartialContentInstitution.cshtml", Model); }
     <form asp-action="Delete">
         <input type="hidden" asp-for="InstitutionId" />
         <input type="submit" value="Delete" class="btn btn-danger" />
