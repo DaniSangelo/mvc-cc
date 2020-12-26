@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<IES.Models.Infra.ApplicationUser> SignInManager
+@inject Microsoft.AspNetCore.Identity.UserManager<IES.Models.Infra.ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    ViewData["LoggedInUser"] = UserManager.GetUserName(User);
+}
+else
+{
+    ViewData["LoggedInUser"] = "";
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -37,7 +49,22 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+                    @if (ViewData["LoggedInUser"] != "")
+                    {
+                        <li>@Html.ActionLink("Logout", "Exit", "Infra", new { area = "" })</li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a class="nav-link" asp-area="" asp-controller="Infra" asp-action="Access">
+                                Inform username and password to access
+                            </a>
+                        </li>
+                    }
                 </ul>
+            </div>
+            <div class="navbar-header">
+                <span style="color: lightgray;">@ViewData["LoggedInUser"]</span>
             </div>
         </div>
     </nav>

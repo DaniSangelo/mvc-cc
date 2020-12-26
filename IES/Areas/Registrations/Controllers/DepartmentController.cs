@@ -7,10 +7,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using IES.Models.Exceptions;
 using IES.Data.DAL.Registrations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IES.Areas.Registrations.Controllers
 {
     [Area("Registrations")]
+    [Authorize]
     public class DepartmentController : Controller
     {
         private readonly IESContext _context;

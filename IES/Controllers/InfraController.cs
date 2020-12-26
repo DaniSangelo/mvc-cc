@@ -33,6 +33,35 @@ namespace IES.Controllers
             return View();
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Access (AccessViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("Authenticated user");
+                    return RedirectToLocal(returnUrl);
+                }
+            }
+            ModelState.AddModelError(string.Empty, "Login attempt failed");
+            return View(model);
+        }
+        
+
+        [HttpGet]
+        public async Task<IActionResult> Exit()
+        {
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("User logged out");
+            ViewData["LoggedInUser"] = "";
+            return RedirectToAction(nameof(HomeController.Index), "Home");
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public IActionResult RegisterNewUser(string returnUrl = null)

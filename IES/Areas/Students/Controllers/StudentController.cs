@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Model.Students;
 using IES.Data.DAL.Students;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using IES.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IES.Areas.Students.Controllers
 {
     [Area("Students")]
+    [Authorize]
     public class StudentController : Controller
     {
         private readonly IESContext _context;
