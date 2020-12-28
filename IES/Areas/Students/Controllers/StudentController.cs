@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 using IES.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.FileProviders;
 
 namespace IES.Areas.Students.Controllers
 {
@@ -14,11 +18,13 @@ namespace IES.Areas.Students.Controllers
     {
         private readonly IESContext _context;
         private readonly StudentDAL _studentDAL;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public StudentController(IESContext context)
+        public StudentController(IESContext context, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
             _studentDAL = new StudentDAL(context);
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public async Task<IActionResult> Index()
@@ -66,7 +72,9 @@ namespace IES.Areas.Students.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long? id, [Bind("StudentId, StudentRegister, Name, BirthDate")] Student student)
+        public async Task<IActionResult> Edit(long? id, 
+            [Bind("StudentId, StudentRegister, Name, BirthDate")] Student student,
+            IFormFile photo)
         {
             if (id != student.StudentId)
                 return NotFound();
@@ -75,6 +83,11 @@ namespace IES.Areas.Students.Controllers
             {
                 try
                 {
+                    var stream = new MemoryStream();
+                    await photo.CopyToAsync(stream);
+                    student.Photo = stream.ToArray();
+                    student.PhotoMimeType = photo.ContentType;
+
                     await _studentDAL.SaveStudent(student);
                 }
                 catch (DbUpdateConcurrencyException)
@@ -124,6 +137,29 @@ namespace IES.Areas.Students.Controllers
         public async Task<bool> HasStudent(long? id)
         {
             return await _studentDAL.GetStudentById((long)id) != null;
+        }
+
+        public async Task<FileContentResult> GetPhoto(long id)
+        {
+            Student student = await _studentDAL.GetStudentById(id);
+            if (student != null)
+                return File(student.Photo, student.PhotoMimeType);
+
+            return null;
+        }
+
+        public async Task<FileResult> DownloadPhoto(long id)
+        {
+            Student student = await _studentDAL.GetStudentById(id);
+            string fileName = "Photo " + student.StudentId.ToString().Trim() + ".jpg";
+            using (FileStream fs = new FileStream(Path.Combine(_hostingEnvironment.WebRootPath, fileName), FileMode.Create, FileAccess.Write))
+            {
+                fs.Write(student.Photo, 0, student.Photo.Length);
+            }
+            IFileProvider provider = new PhysicalFileProvider(_hostingEnvironment.WebRootPath);
+            IFileInfo fileInfo = provider.GetFileInfo(fileName);
+            var rs = fileInfo.CreateReadStream();
+            return File(rs, student.PhotoMimeType, fileName);
         }
     }
 }

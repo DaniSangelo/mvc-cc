@@ -1,0 +1,39 @@
+﻿@model Model.Students.Student
+
+@{
+    ViewData["Title"] = "Student";
+    Layout = "_Layout";
+}
+<div class="row">
+    <hr />
+    <div class="col-md-8">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.StudentRegister)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.StudentRegister)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.BirthDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.BirthDate)
+            </dd>
+        </dl>
+    </div>
+    <div class="col-4">
+        <img class="img-thumbnail" src="@Url.Action("GetPhoto", "Student", new { id = Model.StudentId })" style="display:block; margin-left:auto;margin-right:auto;" />
+        @Html.ActionLink("Download", "DownloadPhoto", "Student", new { id = Model.StudentId }, null)
+    </div>
+</div>
+<div>
+    <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model.StudentId">Edit</a>
+    <a asp-action="Index" class="btn btn-default">Back to List</a>
+</div>

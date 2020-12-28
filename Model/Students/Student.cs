@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 
 namespace Model.Students
 {
@@ -24,5 +24,11 @@ namespace Model.Students
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? BirthDate { get; set; }
+
+        public string PhotoMimeType { get; set; }
+        public byte[] Photo { get; set; }
+
+        [NotMapped]
+        public IFormFile FormFile { get; set; }
     }
 }
