@@ -72,9 +72,9 @@ namespace IES.Areas.Students.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long? id, 
+        public async Task<IActionResult> Edit(long? id,
             [Bind("StudentId, StudentRegister, Name, BirthDate")] Student student,
-            IFormFile photo)
+            IFormFile photo, string chkRemovePhoto)
         {
             if (id != student.StudentId)
                 return NotFound();
@@ -84,15 +84,21 @@ namespace IES.Areas.Students.Controllers
                 try
                 {
                     var stream = new MemoryStream();
-                    await photo.CopyToAsync(stream);
-                    student.Photo = stream.ToArray();
-                    student.PhotoMimeType = photo.ContentType;
-
+                    if (chkRemovePhoto != null)
+                    {
+                        student.Photo = null;
+                    }
+                    else
+                    {
+                        await photo.CopyToAsync(stream);
+                        student.Photo = stream.ToArray();
+                        student.PhotoMimeType = photo.ContentType;
+                    }
                     await _studentDAL.SaveStudent(student);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if(!await HasStudent(student.StudentId))
+                    if (!await HasStudent(student.StudentId))
                     {
                         return NotFound();
                     }
@@ -126,8 +132,8 @@ namespace IES.Areas.Students.Controllers
             if (id == null)
                 return NotFound();
 
-            var student = await _studentDAL.GetStudentById((long) id);
-            
+            var student = await _studentDAL.GetStudentById((long)id);
+
             if (student.StudentId == null)
                 return NotFound();
 
@@ -151,7 +157,7 @@ namespace IES.Areas.Students.Controllers
         public async Task<FileResult> DownloadPhoto(long id)
         {
             Student student = await _studentDAL.GetStudentById(id);
-            string fileName = "Photo " + student.StudentId.ToString().Trim() + ".jpg";
+            string fileName = "Photo" + student.StudentId.ToString().Trim() + ".jpg";
             using (FileStream fs = new FileStream(Path.Combine(_hostingEnvironment.WebRootPath, fileName), FileMode.Create, FileAccess.Write))
             {
                 fs.Write(student.Photo, 0, student.Photo.Length);
