@@ -40,5 +40,12 @@ namespace IES.Data.DAL.Registrations
             await _context.SaveChangesAsync();
             return course;
         }
+
+        public async Task<Course> DeleteCourse(Course course)
+        {
+            _context.Courses.Remove(course);
+            await _context.SaveChangesAsync();
+            return course;
+        }
     }
 }

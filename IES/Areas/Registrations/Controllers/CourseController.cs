@@ -97,6 +97,25 @@ namespace IES.Areas.Registrations.Controllers
 
         #endregion
 
+        #region DELETE
+
+        public async Task<IActionResult> Delete(long? id)
+        {
+            return await GetViewCourseById(id);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmDelete(long? id)
+        {
+            var course = await _courseDAL.GetCourseById((long)id);
+            await _courseDAL.DeleteCourse(course);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        #endregion
+
         #region GET
         private async Task<IActionResult> GetViewCourseById(long? id)
         {
