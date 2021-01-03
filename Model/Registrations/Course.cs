@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Model.Professor;
+using Model.Teacher;
 
 namespace Model.Registrations
 {
@@ -10,7 +10,6 @@ namespace Model.Registrations
         public long? DepartmentId { get; set; }
         public Department Department { get; set; }
         public virtual ICollection<CourseDiscipline> CoursesDisciplines { get; set; }
-        public virtual ICollection<CourseProfessor> CourseProfessors { get; set; }
-
+        public virtual ICollection<CourseProfessor> CoursesProfessors { get; set; }
     }
 }

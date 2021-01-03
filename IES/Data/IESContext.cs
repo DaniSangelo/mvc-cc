@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Model.Registrations;
 using Model.Students;
-using Model.Professor;
+using Model.Teacher;
 
 namespace IES.Data
 {
@@ -40,12 +40,12 @@ namespace IES.Data
 
             modelBuilder.Entity<CourseProfessor>()
                 .HasOne(c => c.Course)
-                .WithMany(cp => cp.CourseProfessors)
+                .WithMany(cp => cp.CoursesProfessors)
                 .HasForeignKey(c => c.CourseId);
 
             modelBuilder.Entity<CourseProfessor>()
                 .HasOne(p => p.Professor)
-                .WithMany(cp => cp.CourseProfessors)
+                .WithMany(cp => cp.CoursesProfessors)
                 .HasForeignKey(p => p.ProfessorId);
         }
         /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

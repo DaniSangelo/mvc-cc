@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IES.Data.DAL.Professor
+namespace IES.Data.DAL.Teacher
 {
     public class ProfessorDAL
     {
