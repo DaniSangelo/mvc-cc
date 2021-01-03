@@ -29,5 +29,16 @@ namespace IES.Data.DAL.Registrations
             _context.Departments.Where(d => course.DepartmentId == d.DepartmentId).Load();
             return course;
         }
+
+        public async Task<Course> SaveCourse(Course course)
+        {
+            if (course.CourseId == null)            
+                _context.Courses.Add(course);            
+            else            
+                _context.Courses.Update(course);
+            
+            await _context.SaveChangesAsync();
+            return course;
+        }
     }
 }

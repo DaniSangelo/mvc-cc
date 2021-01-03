@@ -1,7 +1,7 @@
-﻿@model Model.Registrations.Department
+﻿@model Model.Registrations.Course
 
 @{
-    ViewData["Title"] = "Department";
+    ViewData["Title"] = "Course";
     Layout = "_Layout";
 }
 
@@ -16,12 +16,12 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="InstitutionId" class="control-label"></label>
-                <select asp-for="InstitutionId" class="form-control" asp-items="@(new SelectList(ViewBag.Institutions, "InstitutionId", "Name"))"></select>
+                <label asp-for="DepartmentId" class="control-label"></label>
+                <select asp-for="DepartmentId" class ="form-control" asp-items=@(new SelectList(ViewBag.Departments, "DepartmentId", "Name"))></select>
             </div>
-            <div class=" form-group">
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                <a class="btn btn-default" asp-action="Index">Back to List</a>
+                <a asp-action="Index" class="btn btn-default">Back to List</a>
             </div>
         </form>
     </div>
