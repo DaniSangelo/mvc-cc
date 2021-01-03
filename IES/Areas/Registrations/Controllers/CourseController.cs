@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace IES.Areas.Registrations.Controllers
 {
@@ -61,10 +62,40 @@ namespace IES.Areas.Registrations.Controllers
                 ModelState.AddModelError("", "Wasn't possible to save data");
             }
             return View(course);
-
-            #endregion
-
         }
+
+        #endregion
+
+        #region EDIT
+
+        public async Task<IActionResult> Edit(long? id)
+        {
+            var course = await _courseDAL.GetCourseById((long)id);
+            ViewBag.Departments = new SelectList(_departmentDAL.GetDepartmentsClassifiedByName(), "DepartmentId", "Name", course.DepartmentId);
+            return await GetViewCourseById((long)id);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(long? id, [Bind("CourseId, Name, DepartmentId")] Course course)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    await _courseDAL.SaveCourse(course);
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                ModelState.AddModelError("", "Wasn't possible to save data");
+            }
+            ViewBag.Departments = new SelectList(_departmentDAL.GetDepartmentsClassifiedByName(), "DepartmentId", "Name", course.DepartmentId);
+            return View(course);
+        }
+
+        #endregion
 
         #region GET
         private async Task<IActionResult> GetViewCourseById(long? id)
