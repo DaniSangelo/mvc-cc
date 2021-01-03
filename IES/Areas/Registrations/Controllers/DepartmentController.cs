@@ -55,7 +55,7 @@ namespace IES.Areas.Registrations.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            catch (DbUpdateException)
+            catch (DbUpdateConcurrencyException)
             {
                 ModelState.AddModelError("", "Wasn't possible to insert data");
             }

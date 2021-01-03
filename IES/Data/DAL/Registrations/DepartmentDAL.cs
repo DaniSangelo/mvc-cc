@@ -28,7 +28,7 @@ namespace IES.Data.DAL.Registrations
             return department;
         }
 
-        public async  Task<Department> SaveDepartment(Department department)
+        public async Task<Department> SaveDepartment(Department department)
         {
             if (department.DepartmentId == null)
             {
@@ -48,6 +48,12 @@ namespace IES.Data.DAL.Registrations
             _context.Departments.Remove(department);
             await _context.SaveChangesAsync();
             return department;
+        }
+
+        public IQueryable<Department> GetDepartmentByInstitution(long institutionId)
+        {
+            var departments = _context.Departments.Where(d => d.InstitutionId == institutionId).OrderBy(d => d.Name);
+            return departments;
         }
     }
 }
