@@ -13,5 +13,10 @@ namespace IES.Areas.Teacher.Controllers
         {
             return View();
         }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
     }
 }
