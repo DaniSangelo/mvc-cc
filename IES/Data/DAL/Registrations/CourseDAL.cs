@@ -18,6 +18,7 @@ namespace IES.Data.DAL.Registrations
             _context = context;
         }
 
+        #region GET
         public IQueryable<Course> GetCoursesOrderedByName()
         {
             return _context.Courses.Include(d => d.Department).OrderBy(c => c.Name);
@@ -29,6 +30,21 @@ namespace IES.Data.DAL.Registrations
             _context.Departments.Where(d => course.DepartmentId == d.DepartmentId).Load();
             return course;
         }
+
+        public IQueryable<Course> GetCoursesByDepartment(long departmentId)
+        {
+            var courses = _context.Courses.Where(c => c.DepartmentId == departmentId).OrderBy(d => d.Name);
+            return courses;
+        }
+
+        public IQueryable<Professor> GetProfessorsOutOfCourse(long courseId)
+        {
+            var course = _context.Courses.Where(c => c.CourseId == courseId).Include(cp => cp.CoursesProfessors).First();
+            var professorsOfCourse = course.CoursesProfessors.Select(cp => cp.ProfessorId).ToArray();
+            var professorsOutOfCourse = _context.Professors.Where(p => !professorsOfCourse.Contains(p.ProfessorId));
+            return professorsOutOfCourse;
+        }
+#endregion
 
         public async Task<Course> SaveCourse(Course course)
         {
@@ -46,6 +62,14 @@ namespace IES.Data.DAL.Registrations
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
             return course;
+        }
+
+        public void RegisterProfessor(long courseId, long professorId)
+        {
+            var course = _context.Courses.Where(c => c.CourseId == courseId).Include(cp => cp.CoursesProfessors).First();
+            var professor = _context.Professors.Find(professorId);
+            course.CoursesProfessors.Add(new CourseProfessor() { Course = course, Professor = professor });
+            _context.SaveChanges();
         }
     }
 }

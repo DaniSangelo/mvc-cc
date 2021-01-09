@@ -1,0 +1,86 @@
+﻿@model IES.Areas.Teachers.Models.AddProfessorViewModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="card-block">
+    <div class="card-header text-white bg-danger text-center h1">Registering a professor for a course</div>
+    <div class="card-body">
+        <form asp-action="AddProfessor">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="InstitutionId" class="control-label"></label>
+                <select asp-for="InstitutionId" class="form-control" asp-items="@(new SelectList(@ViewBag.Institutions, "InstitutionId", "Name"))"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartmentId" class="control-label"></label>
+                <select asp-for="DepartmentId" class="form-control"
+                        asp-items="@(new SelectList(@ViewBag.Departments, "DepartmentId", "Name"))"
+                        data-url="@Url.Action("GetDepartmentsByInstitution", "Professor", new { area = "Teachers" })">
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CourseId" class="control-label"></label>
+                <select asp-for="CourseId" class="form-control"
+                        asp-items="@(new SelectList(@ViewBag.Courses, "CourseId", "Name"))"
+                        data-url="@Url.Action("GetCoursesByDepartment", "Professor", new { area = "Teachers" })">
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProfessorId" class="control-label"></label>
+                <select asp-for="ProfessorId" class="form-control"
+                        asp-items="@(new SelectList(@ViewBag.Professors, "ProfessorId", "Name"))"
+                        data-url="@Url.Action("GetProfessorsOutOfCourse", "Professor", new { area = "Teachers" })">
+                </select>
+            </div>
+            <div class="form-group text-center h3">
+                <input type="submit" value="Register Professor" class="btn btn-light" />
+                
+            </div>
+        </form>
+    </div>
+    <div class="card-footer bg-dark text-center text-white">
+        Enter with data above or click on other action button
+    </div>
+</div>
+
+@*@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).on("change", '#InstitutionId', function (e) {
+            var InstitutionId = $(this).find(":selected").val();
+            GetDataToDropDownList(InstitutionId, '#DepartmentId', 'DEPARTMENT');
+        });
+
+        $(document).on("change", '#DepartmentId', function (e) {
+            var DepartmentId = $(this).find(":selected").val();
+            GetDataToDropDownList(DepartmentId, '#CourseId', 'COURSE');
+        });
+
+        $(document).on("change", '#CourseId', function (e) {
+            var CourseId = $(this).find(":selected").val();
+            GetDataToDropDownList(CourseId, '#ProfessorId', 'PROFESSOR');
+        });
+
+        function GetDataToDropDownList(valueSearch, controlUpdate, DataName) {
+            var optioncontrolUpdate = controlUpdate + ' option';
+            if (valueSearch.length > 0) {
+                var url = $(controlUpdate).data('url');
+                $.getJSON(url, { actionID: valueSearch }, function (dataReceived) {
+                    $(optioncontrolUpdate).remove();
+                    $(controlUpdate).append('<option value="0">Select the ' + DataName + '</option');
+                    for (i = 0; i < dataReceived.length; i++) {
+                        $(controlUpdate).append('<option value="' + dataReceived[i].value + '">' + dataReceived[i].text + '</option');
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    debugger;
+                    alert('Conection error', 'Getting error data');
+                });
+            } else {
+                $(optioncontrolUpdate).remove();
+                $(controlUpdate).append('<option value=""></option');
+            }
+        }
+    </script>
+}*@

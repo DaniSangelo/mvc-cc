@@ -50,7 +50,7 @@ namespace IES.Data.DAL.Registrations
             return department;
         }
 
-        public IQueryable<Department> GetDepartmentByInstitution(long institutionId)
+        public IQueryable<Department> GetDepartmentsByInstitution(long institutionId)
         {
             var departments = _context.Departments.Where(d => d.InstitutionId == institutionId).OrderBy(d => d.Name);
             return departments;

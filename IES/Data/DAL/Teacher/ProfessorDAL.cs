@@ -15,5 +15,10 @@ namespace IES.Data.DAL.Teacher
         {
             _context = context;
         }        
+
+        public IQueryable<Professor> GetProfessorsClassifiedByName()
+        {
+            return _context.Professors.OrderBy(p => p.Name);
+        }
     }
 }
