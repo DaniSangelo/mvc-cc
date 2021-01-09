@@ -20,5 +20,31 @@ namespace IES.Data.DAL.Teacher
         {
             return _context.Professors.OrderBy(p => p.Name);
         }
+
+        public async Task<Professor> GetProfessorById(long id)
+        {
+            return await _context.Professors.FindAsync(id);
+        }
+
+        public async Task<Professor> SaveProfessor(Professor professor)
+        {
+            if (professor.ProfessorId == null)
+            {
+                _context.Professors.Add(professor);
+            }
+            else
+            {
+                _context.Professors.Update(professor);
+            }
+            await _context.SaveChangesAsync();
+            return professor;
+        }
+
+        public async Task<Professor> RemoveProfessor(Professor professor)
+        {
+            _context.Professors.Remove(professor);
+            await _context.SaveChangesAsync();
+            return professor;
+        }
     }
 }

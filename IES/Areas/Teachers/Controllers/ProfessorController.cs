@@ -32,7 +32,106 @@ namespace IES.Areas.Teachers.Controllers
             _professorDAL = new ProfessorDAL(_context);
         }
 
-        public void PrepareViewBags(List<Institution> institutions, List<Department> departments, List<Course> courses, List<Professor> professors)
+        public async Task<IActionResult> Index()
+        {
+            return View(await _professorDAL.GetProfessorsClassifiedByName().ToListAsync());
+        }
+
+        public async Task<IActionResult> Details(long id)
+        {
+            return (await GetViewProfessorById(id));
+        }
+
+        #region CREATE
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(long? id, [Bind("ProfessorId, Name")] Professor professor)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    await _professorDAL.SaveProfessor(professor);
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                ModelState.AddModelError("", "Wasn't possible to save data");
+            }
+
+            return View(professor);
+        }
+        #endregion
+
+        #region EDIT
+        public async Task<IActionResult> Edit(long? id)
+        {
+            return await GetViewProfessorById(id);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(long? id, [Bind("ProfessorId, Name")] Professor professor)
+        {
+            if (id == null)
+                return NotFound();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    await _professorDAL.SaveProfessor(professor);
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                ModelState.AddModelError("", "Wasn't possible to save data");
+            }
+            return View(professor);
+        }
+        #endregion
+
+        #region DELETE
+        public async Task<IActionResult> Delete(long? id)
+        {
+            return await GetViewProfessorById(id);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(long? id, [Bind("ProfessorId, Name")] Professor professor)
+        {
+            if (id == null)
+                return NotFound();
+            await _professorDAL.RemoveProfessor(professor);
+            return RedirectToAction(nameof(Index));
+        }
+
+        #endregion
+
+        private async Task<IActionResult> GetViewProfessorById(long? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var professor = await _professorDAL.GetProfessorById((long)id);
+
+            if (professor.ProfessorId == null)
+                return NotFound();
+
+            return View(professor);
+        }
+
+
+
+
+        /*public void PrepareViewBags(List<Institution> institutions, List<Department> departments, List<Course> courses, List<Professor> professors)
         {
             institutions.Insert(0, new Institution() { InstitutionId = 0, Name = "Select the institution" });
             ViewBag.Institutions = institutions;
@@ -90,12 +189,7 @@ namespace IES.Areas.Teachers.Controllers
         {
             var professors = _courseDAL.GetProfessorsOutOfCourse(actionId);
             return Json(new SelectList(professors, "ProfessorId", "Name"));
-        }
+        }*/
 
-        public async Task<IActionResult> Index()
-        {
-            var professors = await _professorDAL.GetProfessorsClassifiedByName().ToListAsync();
-            return View(professors);
-        }
     }
 }
