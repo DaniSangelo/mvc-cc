@@ -1,11 +1,11 @@
 ﻿@model IES.Areas.Teachers.Models.AddProfessorViewModel
 
 @{
+    ViewData["Title"] = "Register professor for a course";
     Layout = "_Layout";
 }
 
 <div class="card-block">
-    <div class="card-header text-white bg-danger text-center h1">Registering a professor for a course</div>
     <div class="card-body">
         <form asp-action="AddProfessor">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -35,17 +35,13 @@
                 </select>
             </div>
             <div class="form-group text-center h3">
-                <input type="submit" value="Register Professor" class="btn btn-light" />
-                
+                <input type="submit" value="Save" class="btn btn-primary" />                
             </div>
         </form>
     </div>
-    <div class="card-footer bg-dark text-center text-white">
-        Enter with data above or click on other action button
-    </div>
 </div>
 
-@*@section Scripts {
+@section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
         $(document).on("change", '#InstitutionId', function (e) {
@@ -83,4 +79,4 @@
             }
         }
     </script>
-}*@
+}

@@ -128,27 +128,24 @@ namespace IES.Areas.Teachers.Controllers
             return View(professor);
         }
 
-
-
-
-        /*public void PrepareViewBags(List<Institution> institutions, List<Department> departments, List<Course> courses, List<Professor> professors)
+        public void PrepareViewBags(List<Institution> institutions, List<Department> departments, List<Course> courses, List<Professor> professors)
         {
             institutions.Insert(0, new Institution() { InstitutionId = 0, Name = "Select the institution" });
             ViewBag.Institutions = institutions;
 
             departments.Insert(0, new Department() { DepartmentId = 0, Name = "Select the department" });
-            ViewBag.Institutions = departments;
+            ViewBag.Departments = departments;
 
             courses.Insert(0, new Course() { CourseId = 0, Name = "Select the course" });
-            ViewBag.Institutions = courses;
+            ViewBag.Courses = courses;
 
             professors.Insert(0, new Professor() { ProfessorId = 0, Name = "Select the professor" });
-            ViewBag.Institutions = professors;
+            ViewBag.Professors = professors;
 
         }
 
         [HttpGet]
-        public IActionResult AddPrfessor()
+        public IActionResult AddProfessor()
         {
             PrepareViewBags(_institutionDAL.GetInstitutionsOrderedByName().ToList(), new List<Department>().ToList(), new List<Course>().ToList(), new List<Professor>().ToList());
             return View();
@@ -189,7 +186,6 @@ namespace IES.Areas.Teachers.Controllers
         {
             var professors = _courseDAL.GetProfessorsOutOfCourse(actionId);
             return Json(new SelectList(professors, "ProfessorId", "Name"));
-        }*/
-
+        }
     }
 }
